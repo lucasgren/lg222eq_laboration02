@@ -9,6 +9,6 @@
 #import "Author.h"
 
 @implementation Author
-@synthesize name, uri;
+@synthesize name, uri, image;
 
 @end

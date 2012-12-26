@@ -9,17 +9,27 @@
 #import <Foundation/Foundation.h>
 #import "Tweet.h"
 #import "TweetParser.h"
+#import "AppDelegate.h"
 
 @interface DataHandler : NSObject
 
 
-@property (nonatomic) NSMutableArray *arrayOfTweets;
-@property (nonatomic) NSMutableArray *arrayOfSavedTweets;
-@property (nonatomic) NSDictionary *textRepresentation;
-@property (nonatomic) NSMutableArray *arrayOfTextRepresentations;
+//@property (nonatomic) NSMutableArray *arrayOfTweets;
+//@property (nonatomic) NSMutableArray *arrayOfSavedTweets;
 
+
++(void)saveTweet:(Tweet*) tweet;
++(NSArray*)loadTweets;
++(void)deleteTweet:(Tweet*) tweet;
++(void)deleteAllTweets;
++(BOOL) containsTweet:(Tweet*) tweet;
+//+(BOOL) isValid;
+//+(void) invalidateData;
++(int) nrOfElements;
++(Tweet*) tweetAtIndex:(int) index;
++(void)addObserver:(id)observer selector:(SEL)aSelector;
 
 + (DataHandler *)sharedInstance;
-- (NSMutableArray *) getSavedTweets;
+
 
 @end

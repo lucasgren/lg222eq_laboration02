@@ -10,15 +10,8 @@
 
 @implementation Tweet
 
-@synthesize tweetID, published, link, title, content, updated, imageLink, theAuthor, saved;
+@synthesize message, url, theAuthor, saved;
 
 
-- (NSDictionary *)plistRepresentation{
-    
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            theAuthor.name, @"name",
-            [self content], @"content", nil];
-            }
-       
 
 @end

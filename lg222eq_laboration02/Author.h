@@ -11,6 +11,7 @@
 @interface Author : NSObject
 
 @property (nonatomic) NSString *name;
-@property (nonatomic) NSString *uri;
+@property (nonatomic) NSURL *uri;
+@property (nonatomic, strong) UIImage *image;
 
 @end

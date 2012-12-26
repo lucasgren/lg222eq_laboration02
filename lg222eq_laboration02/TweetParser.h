@@ -24,11 +24,8 @@
 @property (nonatomic) NSMutableString *nameString;
 @property (nonatomic) NSString *hrefString;
 @property (nonatomic) NSMutableString *messageString;
-@property (nonatomic) NSMutableString *currentProperty;
 @property (nonatomic) NSMutableString *imageURLString;
-@property (nonatomic) NSMutableArray *nameArray;
-@property (nonatomic) NSMutableArray *messageArray;
-@property (nonatomic) NSMutableArray *imageURLArray;
+
 @property (nonatomic) BOOL dataLoaded;
 
 

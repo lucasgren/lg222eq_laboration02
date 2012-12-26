@@ -23,7 +23,7 @@
     
     
 }*/
-
+/*
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -76,21 +76,21 @@
     
 }*/
 
-
+/*
 - (void)viewDidLoad{
     
     DataHandler *dh = [DataHandler sharedInstance];
     
-    savedTweets = [dh getSavedTweets];
+//    savedTweets = [dh loadTweets];
     
     nameStringArray = [[NSMutableArray alloc]init];
     messageStringArray = [[NSMutableArray alloc]init];
     imageURLStringArray = [[NSMutableArray alloc]init];
     
     for (Tweet *tw in savedTweets) {
-        [messageStringArray addObject:tw.content];
+        [messageStringArray addObject:tw.message];
         [nameStringArray addObject:tw.theAuthor.name];
-            [imageURLStringArray addObject:tw.imageLink];
+            [imageURLStringArray addObject:tw.url];
         }
     
     
@@ -100,7 +100,7 @@
 /*    NSNotificationCenter *no = [NSNotificationCenter defaultCenter];
     [no addObserver:self selector:@selector(getSaved:) name:@"saved" object:nil];*/
     
-
+/*
 
 }
 
@@ -112,6 +112,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
+}*/
 
 @end

@@ -35,7 +35,7 @@
     [name setText: theTweet.theAuthor.name];
     content.numberOfLines = 4;
     //    content.adjustsFontSizeToFitWidth = YES;
-    [content setText:theTweet.content];
+    [content setText:theTweet.message];
     
 
 

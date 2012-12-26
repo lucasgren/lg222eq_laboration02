@@ -11,7 +11,17 @@
 
 @implementation TweetParser
 
-@synthesize nameString, nameArray, arrayOfTweets, messageArray, messageString, imageURLArray, imageURLString, currentProperty, dataLoaded;
+@synthesize nameString, arrayOfTweets, messageString, imageURLString, dataLoaded, hrefString;
+
+NSString *currentProperty;
+static NSString* const notificationName = @"DataFetcherNotification";
+static NSString* const titleTag = @"title";
+static NSString* const nameTag = @"name";
+static NSString* const itemTag = @"entry";
+static NSString* const uriTag = @"uri";
+static NSString* const linkTag = @"link";
+static NSString* const linkAttribute = @"href";
+
 
 //Turns TweetParser into a Singleton
 + (TweetParser *)sharedInstance{
@@ -31,10 +41,15 @@
 
     dataLoaded = NO;
     
-    NSString *urln = @"http://search.twitter.com/search.atom?q=";
-    NSString *fullURL = [urln stringByAppendingString:word];
-    NSURL *url = [NSURL URLWithString:fullURL]; 
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    NSString *urln = @"http://search.twitter.com/search.atom?q=";
+//    NSString *fullURL = [urln stringByAppendingString:word];
+//    NSURL *url = [NSURL URLWithString:fullURL];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSString *url = [[NSString alloc] initWithFormat: @"http://search.twitter.com/search.atom?q=%@", word];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+   
+    
     
     conn = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
     xmldata = [[NSMutableData alloc] init];
@@ -43,7 +58,7 @@
 //    messageArray = [[NSMutableArray alloc]init];
 //    imageURLArray = [[NSMutableArray alloc]init];
     
-    waitingForEntryElement = NO;
+    waitingForEntryElement = YES;
 }
 
 
@@ -95,82 +110,99 @@
 -(void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{
     
     
-    if (qName) {
-        elementName = qName;
-    }
-    
     if (currentAuthor) { // Are we in a
         // Check for standard nodes
-        if ([elementName isEqualToString:@"name"] || [elementName isEqualToString:@"uri"]) {
-            currentProperty = [NSMutableString string];
-        }
-    } else if (currentTweet) { // Are we in a
-        // Check for standard nodes
-        if ([elementName isEqualToString:@"title"] || [elementName isEqualToString:@"content"] || [elementName isEqualToString:@"link"]) {
-            currentProperty = [NSMutableString string];
-            // Check for deeper nested node
-        } else if ([elementName isEqualToString:@"author"]) {
-            currentAuthor = [[Author alloc] init]; // Create the element
+        if ([elementName isEqualToString:nameTag]) {
+            currentProperty = nameTag;
+            currentAuthor = [[Author alloc] init];
+            nameString = [[NSMutableString alloc] init];
         }
         
-    } else { // We are outside of everything, so we need a
-        // Check for deeper nested node
-        if ([elementName isEqualToString:@"entry"]) {
+        else if([elementName isEqual:uriTag] && waitingForEntryElement){
+            currentProperty = uriTag;
+            NSString *linkString=[attributeDict valueForKey:linkAttribute];
+            NSURL *url = [NSURL URLWithString:linkString];
+            [currentAuthor setUri:url];
+        }
+        
+        else if([elementName isEqual:linkTag] && [[attributeDict valueForKey:@"type"] isEqual:@"image/png"]){
+            currentProperty = linkTag;
+            NSString *linkString=[attributeDict valueForKey:linkAttribute];
+            NSURL *url = [NSURL URLWithString:linkString];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            UIImage *image = [[UIImage alloc] initWithData:data];
+            [currentAuthor setImage:image];
+        }
+        
+        
+    } else if (currentTweet) { // Are we in a
+        // Check for standard nodes
+        
+        if([elementName isEqual:itemTag]){
+            currentProperty = itemTag;
             currentTweet = [[Tweet alloc] init];
+            waitingForEntryElement = NO;
+        }
+        else if([elementName isEqual:titleTag] && waitingForEntryElement){
+            currentProperty = titleTag;
+            messageString = [[NSMutableString alloc] init];
+        }
+
+
+        else if([elementName isEqual:linkTag] && [[attributeDict valueForKey:@"type"] isEqual:@"text/html"]){
+            currentProperty = linkTag;
+            [currentTweet setUrl:[attributeDict valueForKey:linkAttribute]];
         }
     }
+    
     
 
 }
 
 -(void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
+   
     
+
     
     
     if (!currentProperty) {
         currentProperty = [[NSMutableString alloc]initWithString:string];
     }
-    else
-        [currentProperty appendString:string];
-
+    else if([currentProperty isEqual:titleTag]){
+        [messageString appendString: string];
+    }
+    else if([currentProperty isEqual:nameTag]){
+        [nameString appendString: string];
+    }
 
 }
 
 -(void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
     
+    
     if (currentAuthor) { // Are we in a
         // Check for standard nodes
-        if ([elementName isEqualToString:@"name"]) {
-            currentAuthor.name = currentProperty;
-        } else if ([elementName isEqualToString:@"uri"]) {
-            currentAuthor.uri = currentProperty;
-            // Are we at the end?
-        } else if ([elementName isEqualToString:@"author"]) {
-            [currentTweet setTheAuthor: currentAuthor]; // Add to parent
-            currentAuthor = nil; // Set nil
-        }
+        if ([elementName isEqualToString:nameTag]&& waitingForEntryElement) {
+            currentAuthor.name = nameString;
+
         
     } else if (currentTweet) { // Are we in a  ?
-        // Check for standard nodes
-        if ([elementName isEqualToString:@"title"]) {
-            currentTweet.title = currentProperty;
-        } else if ([elementName isEqualToString:@"content"]) {
-            currentTweet.content = currentProperty;
-        }  else if ([elementName isEqualToString:@"link"]) {
-            currentTweet.imageLink = currentProperty;
-            // Are we at the end?
-        }else if ([elementName isEqualToString:@"entry"]) {
-            [arrayOfTweets addObject: currentTweet]; // Add to the result node
-     //       NSLog(@"%@", currentTweet.content);
-            currentTweet = nil; // Set nil
+        // Check for standard nodes        
+        if([elementName isEqual:itemTag]){
+            currentTweet.theAuthor = currentAuthor;
+            [arrayOfTweets addObject: currentTweet];
+            waitingForEntryElement = NO;
         }
-
+        else if([elementName isEqual:titleTag] && waitingForEntryElement){
+            [currentTweet setMessage: messageString];
+        }
+        
+        
     }
-    
     // Reset the currentProperty, for the next textnodes..
     currentProperty = nil;
-}
-    
-  
 
+
+    }
+}
 @end

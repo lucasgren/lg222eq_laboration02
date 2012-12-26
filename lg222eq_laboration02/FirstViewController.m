@@ -110,9 +110,9 @@
     TweetParser *tp = [TweetParser sharedInstance];
 //    if (data== YES) {
         for (Tweet *tweet in tp.arrayOfTweets) {
-            [messageStringArray addObject:tweet.content];
+            [messageStringArray addObject:tweet.message];
             [nameStringArray addObject:tweet.theAuthor.name];
-            [imageURLStringArray addObject:tweet.imageLink];
+            [imageURLStringArray addObject:tweet.url];
             
 //        }
     }
