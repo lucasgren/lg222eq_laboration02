@@ -37,9 +37,9 @@ NSMutableArray *arrayOfTweets;
  //   if(![DataHandler containsTweet:tweet]){
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSManagedObject *item = [NSEntityDescription insertNewObjectForEntityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
-        [item setValue:tweet.message forKey:messageKey];
+        [item setValue:tweet.title forKey:messageKey];
         [item setValue:tweet.theAuthor.name forKey:nameKey];
-        [item setValue:tweet.url forKey:uniqueURLKey];
+        [item setValue:tweet.link forKey:uniqueURLKey];
         [DataHandler invalidateData];
         [delegate saveContext];
  //   }
@@ -52,7 +52,7 @@ NSMutableArray *arrayOfTweets;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.url];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.link];
     [request setPredicate:predicate];
     
     NSError *error;
@@ -118,8 +118,8 @@ NSMutableArray *arrayOfTweets;
             for(NSManagedObject *object in objects){
                 Tweet *tweet = [[Tweet alloc] init];
                 [tweet.theAuthor setName:[object valueForKey:nameKey]];
-                [tweet setMessage:[object valueForKey:messageKey]];
-                [tweet setUrl:[object valueForKey:uniqueURLKey]];
+                [tweet setTitle:[object valueForKey:messageKey]];
+                [tweet setLink:[object valueForKey:uniqueURLKey]];
                 [arrayOfTweets addObject:tweet];
             }
         }
@@ -135,7 +135,7 @@ NSMutableArray *arrayOfTweets;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.url];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.link];
     [request setPredicate:predicate];
     
     NSError *error;
@@ -154,16 +154,16 @@ NSMutableArray *arrayOfTweets;
 
 // The number of stored Tweets.
 +(int)nrOfElements{
-    if(![DataHandler isValid]){
-        [DataHandler loadTweets];
+    if(![self isValid]){
+        [self loadTweets];
     }
     return [arrayOfTweets count];
 }
 
 // Provides the Tweet at the provided index.
 +(Tweet*)tweetAtIndex:(int)index{
-    if(![DataHandler isValid]){
-        [DataHandler loadTweets];
+    if(![self isValid]){
+        [self loadTweets];
     }
     return [arrayOfTweets objectAtIndex: index];
 }
@@ -182,7 +182,6 @@ NSMutableArray *arrayOfTweets;
 +(void) postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 }
-
 
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation Tweet
 
-@synthesize message, url, theAuthor, saved;
+@synthesize tweetID, published, link, title, content, updated, imageLink, theAuthor, saved;
 
 
 

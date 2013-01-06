@@ -14,7 +14,7 @@
 
 @implementation DetailViewController
 
-@synthesize selectedTweet, saveButtonIsActive, theTweet, indexInteger, arrayOfTweets, savedTweets;
+@synthesize selectedTweet, saveButtonIsActive, theTweet, indexInteger, arrayOfTweets;
 
 
 
@@ -35,7 +35,7 @@
     [name setText: theTweet.theAuthor.name];
     content.numberOfLines = 4;
     //    content.adjustsFontSizeToFitWidth = YES;
-    [content setText:theTweet.message];
+    [content setText:theTweet.title];
     
 
 
@@ -43,7 +43,6 @@
 
 -(IBAction)pressedSaveAsFavourite:(id)sender{
     
-    savedTweets = [[NSMutableArray alloc] init];
     
     //Fixes bug of having to press save twice the first time
     if (i == 0) {
@@ -62,8 +61,7 @@
         
 //        TweetParser *tp = [TweetParser sharedInstance];
         
-
-        theTweet.saved = YES;
+        [DataHandler saveTweet:theTweet];
          
         //Notify
         NSDictionary *extraInfo = [NSDictionary dictionaryWithObject:theTweet forKey:@"tweet"];
@@ -85,7 +83,7 @@
         
  //       [[tp.arrayOfTweets objectAtIndex:indexInteger] setSaved:NO];
   //      [savedTweets removeObject:theTweet];
-        theTweet.saved = NO;
+        [DataHandler deleteTweet:theTweet];
         
     }
     

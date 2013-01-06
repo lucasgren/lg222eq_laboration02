@@ -24,8 +24,6 @@
 @property (nonatomic) BOOL saveButtonIsActive;
 @property (nonatomic) NSInteger indexInteger;
 @property (nonatomic) NSMutableArray *arrayOfTweets;
-//@property (nonatomic) BOOL saved;
-@property (nonatomic) NSMutableArray *savedTweets;
 
 
 -(IBAction)pressedSaveAsFavourite:(id)sender;

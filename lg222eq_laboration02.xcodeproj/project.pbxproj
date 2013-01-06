@@ -300,11 +300,7 @@
 		C506B0FC159CB637009A493E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/iOS DeviceSupport/6.0.1 (10A523)/Symbols/System/Library/Frameworks\"",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "lg222eq_laboration02/lg222eq_laboration02-Prefix.pch";
 				INFOPLIST_FILE = "lg222eq_laboration02/lg222eq_laboration02-Info.plist";
@@ -320,11 +316,7 @@
 		C506B0FD159CB637009A493E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/iOS DeviceSupport/6.0.1 (10A523)/Symbols/System/Library/Frameworks\"",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "lg222eq_laboration02/lg222eq_laboration02-Prefix.pch";
 				INFOPLIST_FILE = "lg222eq_laboration02/lg222eq_laboration02-Info.plist";

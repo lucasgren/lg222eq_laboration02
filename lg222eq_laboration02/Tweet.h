@@ -11,8 +11,13 @@
 
 @interface Tweet : NSObject
 
-@property (nonatomic) NSString *message;
-@property (nonatomic) NSURL *url;
+@property (nonatomic) NSString *tweetID;
+@property (nonatomic) NSString *published;
+@property (nonatomic) NSURL *link;
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *content;
+@property (nonatomic) NSString *updated;
+@property (nonatomic) NSString *imageLink;
 @property (nonatomic) Author *theAuthor;
 @property (nonatomic) BOOL saved;
 
