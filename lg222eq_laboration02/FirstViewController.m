@@ -97,42 +97,17 @@
     return messageStringArray.count;
 }
 
--(void) doneParsing: (NSNotification *) note{
-    
 
-    NSDictionary *dict = [note userInfo];
-    NSNumber *dataload = [dict objectForKey:@"dataLoaded"];
-    data = [dataload boolValue];
-    
-    nameStringArray = [[NSMutableArray alloc]init];
-    messageStringArray = [[NSMutableArray alloc]init];
-    imageURLStringArray = [[NSMutableArray alloc]init];
-    TweetParser *tp = [TweetParser sharedInstance];
-//    if (data== YES) {
-        for (Tweet *tweet in tp.arrayOfTweets) {
-            [messageStringArray addObject:tweet.title];
-            [nameStringArray addObject:tweet.theAuthor.name];
-  //          [imageURLStringArray addObject:tweet.link];
-            
-//        }
-    }
-    
-    
-    
-    [tableView reloadData];
-    [activity stopAnimating];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
-    
-    
-}
+//   [tableView reloadData];
+//[activity stopAnimating];
+//[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
 
 
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    NSNotificationCenter *ns = [NSNotificationCenter defaultCenter];
-    [ns addObserver:self selector:@selector(doneParsing:) name:@"parsed" object:nil];
 }
 
 

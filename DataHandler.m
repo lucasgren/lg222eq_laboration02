@@ -37,9 +37,9 @@ NSMutableArray *arrayOfTweets;
  //   if(![DataHandler containsTweet:tweet]){
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSManagedObject *item = [NSEntityDescription insertNewObjectForEntityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
-        [item setValue:tweet.title forKey:messageKey];
-        [item setValue:tweet.theAuthor.name forKey:nameKey];
-        [item setValue:tweet.link forKey:uniqueURLKey];
+        [item setValue:tweet.message forKey:messageKey];
+        [item setValue:tweet.name forKey:nameKey];//add relationship!!!
+        [item setValue:tweet.url forKey:uniqueURLKey];
         [DataHandler invalidateData];
         [delegate saveContext];
  //   }
@@ -52,7 +52,7 @@ NSMutableArray *arrayOfTweets;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.link];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.url];
     [request setPredicate:predicate];
     
     NSError *error;
@@ -117,9 +117,9 @@ NSMutableArray *arrayOfTweets;
         else{
             for(NSManagedObject *object in objects){
                 Tweet *tweet = [[Tweet alloc] init];
-                [tweet.theAuthor setName:[object valueForKey:nameKey]];
-                [tweet setTitle:[object valueForKey:messageKey]];
-                [tweet setLink:[object valueForKey:uniqueURLKey]];
+                [tweet setName:[object valueForKey:nameKey]];
+                [tweet setMessage:[object valueForKey:messageKey]];
+                [tweet setUrl:[object valueForKey:uniqueURLKey]];
                 [arrayOfTweets addObject:tweet];
             }
         }
@@ -135,7 +135,7 @@ NSMutableArray *arrayOfTweets;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.link];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", uniqueURLKey, tweet.url];
     [request setPredicate:predicate];
     
     NSError *error;

@@ -2,16 +2,17 @@
 //  Tweet.m
 //  lg222eq_laboration02
 //
-//  Created by Lucas Gren on 2012-06-28.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Lucas Gren on 2013-01-08.
+//
 //
 
 #import "Tweet.h"
 
+
 @implementation Tweet
 
-@synthesize tweetID, published, link, title, content, updated, imageLink, theAuthor, saved;
-
-
+@synthesize message;
+@synthesize url;
+@synthesize name;
 
 @end

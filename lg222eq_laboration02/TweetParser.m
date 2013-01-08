@@ -99,19 +99,19 @@
         elementName = qName;
     }
     
-    if (currentAuthor) { // Are we in a
+ /*   if (currentAuthor) { // Are we in a
         // Check for standard nodes
         if ([elementName isEqualToString:@"name"] || [elementName isEqualToString:@"uri"]) {
             currentProperty = [NSMutableString string];
         }
-    } else if (currentTweet) { // Are we in a
+    } else*/ if (currentTweet) { // Are we in a
         // Check for standard nodes
-        if ([elementName isEqualToString:@"title"] || [elementName isEqualToString:@"content"] || [elementName isEqualToString:@"link"]) {
+        if ([elementName isEqualToString:@"title"] || [elementName isEqualToString:@"name"] || [elementName isEqualToString:@"link"]) {
             currentProperty = [NSMutableString string];
             // Check for deeper nested node
-        } else if ([elementName isEqualToString:@"author"]) {
+        } /*else if ([elementName isEqualToString:@"author"]) {
             currentAuthor = [[Author alloc] init]; // Create the element
-        }
+        }*/
         
     } else { // We are outside of everything, so we need a
         // Check for deeper nested node
@@ -138,26 +138,28 @@
 
 -(void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
     
-    if (currentAuthor) { // Are we in a
+/*    if (currentAuthor) { // Are we in a
         // Check for standard nodes
         if ([elementName isEqualToString:@"name"]) {
             currentAuthor.name = currentProperty;
-        }/* else if ([elementName isEqualToString:@"uri"]) {
-            currentAuthor.uri = currentProperty;
+        } else if ([elementName isEqualToString:@"uri"]) {
+            
+            NSURL *url = [NSURL URLWithString:currentProperty];
+            currentAuthor.uri = url;
             // Are we at the end?
-        }*/ else if ([elementName isEqualToString:@"author"]) {
+        } else if ([elementName isEqualToString:@"author"]) {
             [currentTweet setTheAuthor: currentAuthor]; // Add to parent
             currentAuthor = nil; // Set nil
         }
         
-    } else if (currentTweet) { // Are we in a  ?
+    } else*/ if (currentTweet) { // Are we in a  ?
         // Check for standard nodes
         if ([elementName isEqualToString:@"title"]) {
-            currentTweet.title = currentProperty;
-        } else if ([elementName isEqualToString:@"content"]) {
-            currentTweet.content = currentProperty;
+            currentTweet.message = currentProperty;
+        } else if ([elementName isEqualToString:@"name"]) {
+            currentTweet.name = currentProperty;
         }  else if ([elementName isEqualToString:@"link"]) {
-            currentTweet.imageLink = currentProperty;
+            currentTweet.url = currentProperty;
             // Are we at the end?
         }else if ([elementName isEqualToString:@"entry"]) {
             [arrayOfTweets addObject: currentTweet]; // Add to the result node

@@ -15,7 +15,6 @@
     NSMutableArray *nameArray;
     BOOL waitingForEntryElement;
     Tweet *currentTweet;
-    Author *currentAuthor;
     
 }
 

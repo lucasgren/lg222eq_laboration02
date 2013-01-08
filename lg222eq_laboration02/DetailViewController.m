@@ -32,10 +32,10 @@
     
     theTweet = [tp.arrayOfTweets objectAtIndex:indexInteger];
 
-    [name setText: theTweet.theAuthor.name];
+    [name setText: theTweet.name];
     content.numberOfLines = 4;
     //    content.adjustsFontSizeToFitWidth = YES;
-    [content setText:theTweet.title];
+    [content setText:theTweet.message];
     
 
 
@@ -64,13 +64,14 @@
         [DataHandler saveTweet:theTweet];
          
         //Notify
+        /*
         NSDictionary *extraInfo = [NSDictionary dictionaryWithObject:theTweet forKey:@"tweet"];
         
         NSNotification *notify = [NSNotification notificationWithName:@"saved" object:self userInfo:extraInfo];
         
         [[NSNotificationCenter defaultCenter]postNotification:notify];
 
-
+*/
 
 
         
