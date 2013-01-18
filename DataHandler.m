@@ -14,7 +14,6 @@ BOOL isValid = NO;
 NSString* const messageKey = @"message";
 NSString* const nameKey = @"name";
 NSString* const uniqueURLKey = @"url";
-NSString* const tableName = @"Tweet";
 static NSString* const notificationName = @"TweetDatabaseNotification";
 NSMutableArray *arrayOfTweets;
 
@@ -34,21 +33,21 @@ NSMutableArray *arrayOfTweets;
 
 // Adds the provided Tweet to the database, if a Tweet with the same uniqueURL doesn't exist.
 +(void)saveTweet:(Tweet*) tweet{
- //   if(![DataHandler containsTweet:tweet]){
+    if(![DataHandler containsTweet:tweet]){
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        NSManagedObject *item = [NSEntityDescription insertNewObjectForEntityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
+        NSManagedObject *item = [NSEntityDescription insertNewObjectForEntityForName:@"Tweet" inManagedObjectContext:[delegate managedObjectContext]];
         [item setValue:tweet.message forKey:messageKey];
         [item setValue:tweet.name forKey:nameKey];//add relationship!!!
         [item setValue:tweet.url forKey:uniqueURLKey];
         [DataHandler invalidateData];
         [delegate saveContext];
- //   }
+    }
 }
 
 //Deletes all Tweets with the same uniqueURL as the provided Tweet.
 +(void)deleteTweet:(Tweet*) tweet{
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSEntityDescription *eDesc = [NSEntityDescription entityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
+    NSEntityDescription *eDesc = [NSEntityDescription entityForName:@"Tweet" inManagedObjectContext:[delegate managedObjectContext]];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
@@ -71,7 +70,7 @@ NSMutableArray *arrayOfTweets;
 // Deletes all Tweets in the database.
 +(void)deleteAllTweets{
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSEntityDescription *eDesc = [NSEntityDescription entityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
+    NSEntityDescription *eDesc = [NSEntityDescription entityForName:@"Tweet" inManagedObjectContext:[delegate managedObjectContext]];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];
@@ -101,7 +100,7 @@ NSMutableArray *arrayOfTweets;
 +(NSArray*)loadTweets{
     if(![DataHandler isValid]){
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        NSEntityDescription *eDesc = [NSEntityDescription entityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
+        NSEntityDescription *eDesc = [NSEntityDescription entityForName:@"Tweet" inManagedObjectContext:[delegate managedObjectContext]];
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         
         [request setEntity:eDesc];
@@ -131,7 +130,7 @@ NSMutableArray *arrayOfTweets;
 // Specifies whether a Tweet with the same uniqueURL as the provided Tweet exists in the database.
 +(BOOL) containsTweet:(Tweet*) tweet{
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSEntityDescription *eDesc = [NSEntityDescription entityForName:tableName inManagedObjectContext:[delegate managedObjectContext]];
+    NSEntityDescription *eDesc = [NSEntityDescription entityForName:@"Tweet" inManagedObjectContext:[delegate managedObjectContext]];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:eDesc];

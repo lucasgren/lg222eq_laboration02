@@ -12,15 +12,8 @@
 
 
 @interface SecondViewController : UIViewController{
-    
     IBOutlet UITableView *tableView;
-    BOOL data;
 }
-
-@property (nonatomic) NSMutableArray *nameStringArray;
-@property (nonatomic) NSMutableArray *messageStringArray;
-@property (nonatomic) NSMutableArray *imageURLStringArray;
-@property (nonatomic) NSMutableArray *savedTweets;
 
 
 @end

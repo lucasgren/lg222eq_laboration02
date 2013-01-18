@@ -42,14 +42,14 @@
     DetailViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:@"Detail"];
     [self.navigationController pushViewController:detail animated:YES];
         
-    NSNumber *indexForTweet = [NSNumber numberWithInt:[indexPath row]];
 
 
-    //selectedTweet = [td.arrayOfTweets objectAtIndex:[indexPath row]];
     
-  //  NSLog(@"%@", selectedTweet.theAuthor.name);
+    NSNumber *indexTweet = [NSNumber numberWithInt:[indexPath row]];
+    
 
-    NSDictionary *extraInfo = [NSDictionary dictionaryWithObjectsAndKeys: indexForTweet, @"indexTweet", nil];
+
+    NSDictionary *extraInfo = [NSDictionary dictionaryWithObjectsAndKeys: indexTweet, @"indexTweet", nil];
     
     NSNotification *notify = [NSNotification notificationWithName:@"clicked" object:self userInfo:extraInfo];
     
@@ -97,17 +97,42 @@
     return messageStringArray.count;
 }
 
+-(void) doneParsing: (NSNotification *) note{
+    
 
+    NSDictionary *dict = [note userInfo];
+    NSNumber *dataload = [dict objectForKey:@"dataLoaded"];
+    data = [dataload boolValue];
+    
+    nameStringArray = [[NSMutableArray alloc]init];
+    messageStringArray = [[NSMutableArray alloc]init];
+    imageURLStringArray = [[NSMutableArray alloc]init];
+    TweetParser *tp = [TweetParser sharedInstance];
+//    if (data== YES) {
+        for (Tweet *tweet in tp.arrayOfTweets) {
+            [messageStringArray addObject:tweet.message];
+            [nameStringArray addObject:tweet.name];
+       //     [urlStringArray addObject:tweet.url];
+            
+//        }
+    }
+    
+    
+    
+    [tableView reloadData];
+    [activity stopAnimating];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
-//   [tableView reloadData];
-//[activity stopAnimating];
-//[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+    
+    
+}
 
 
 - (void)viewDidLoad{
     [super viewDidLoad];
     
+    NSNotificationCenter *ns = [NSNotificationCenter defaultCenter];
+    [ns addObserver:self selector:@selector(doneParsing:) name:@"parsed" object:nil];
 }
 
 

@@ -15,15 +15,14 @@
 
 @implementation SecondViewController
 
-@synthesize nameStringArray, messageStringArray, imageURLStringArray, savedTweets;
 
-/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DetailViewController *detail = [self.storyboard instantiateViewControllerWithIdentifier:@"Detail"];
     [self.navigationController pushViewController:detail animated:YES];
-    
-    
-}*/
-/*
+
+}
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -32,7 +31,15 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     }
-    cell.textLabel.text = [messageStringArray objectAtIndex:[indexPath row]];
+/*    cell.textLabel.text = [messageStringArray objectAtIndex:[indexPath row]];
+    
+        for (Tweet *tweets in arrayOfTweets) {
+     NSString *imageFile = [[NSBundle mainBundle] pathForResource: [imageURLStringArray objectAtIndex:[indexPath row]] ofType:@"png"];
+     NSLog(@"%@", tweets.imageLink);
+     }
+     
+     UIImage *ui = [[UIImage alloc] initWithContentsOfFile:imageFile];
+     cell.imageView.image = ui;
     
     cell.detailTextLabel.text = [nameStringArray objectAtIndex:[indexPath row]];
     
@@ -45,73 +52,60 @@
     return cell;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     return messageStringArray.count;
-
 }
-/*
-- (void) getSaved: (NSNotification *) note{
+
+-(void) loadFromDatabase{
+    
     
     NSDictionary *dict = [note userInfo];
-    Tweet *tweet = [dict objectForKey:@"tweet"];
-    [savedTweets addObject:tweet];
-    
-    NSLog(@"%@", tweet);
-
+    NSNumber *dataload = [dict objectForKey:@"dataLoaded"];
+    data = [dataload boolValue];
     
     nameStringArray = [[NSMutableArray alloc]init];
     messageStringArray = [[NSMutableArray alloc]init];
     imageURLStringArray = [[NSMutableArray alloc]init];
-
-//    for (Tweet *tw in savedTweets) {
-            [messageStringArray addObject:tweet.content];
-            [nameStringArray addObject:tweet.theAuthor.name];
-    //        [imageURLStringArray addObject:tw.imageLink];
- //       }
+    TweetParser *tp = [TweetParser sharedInstance];
+    //    if (data== YES) {
+    for (Tweet *tweet in tp.arrayOfTweets) {
+        [messageStringArray addObject:tweet.message];
+        [nameStringArray addObject:tweet.name];
+        //     [urlStringArray addObject:tweet.url];
         
+        //        }
+    }
     
-    [tableView reloadData];
-    
-    
-}*/
-
-/*
-- (void)viewDidLoad{
-    
-    DataHandler *dh = [DataHandler sharedInstance];
-    
-//    savedTweets = [dh loadTweets];
-    
-    nameStringArray = [[NSMutableArray alloc]init];
-    messageStringArray = [[NSMutableArray alloc]init];
-    imageURLStringArray = [[NSMutableArray alloc]init];
-    
-    for (Tweet *tw in savedTweets) {
-        [messageStringArray addObject:tw.message];
-        [nameStringArray addObject:tw.theAuthor.name];
-            [imageURLStringArray addObject:tw.url];
-        }
     
     
     [tableView reloadData];
+    [activity stopAnimating];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     
     
-/*    NSNotificationCenter *no = [NSNotificationCenter defaultCenter];
-    [no addObserver:self selector:@selector(getSaved:) name:@"saved" object:nil];*/
     
-/*
-
 }
 
-- (void)viewDidUnload{
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
+    NSNotificationCenter *ns = [NSNotificationCenter defaultCenter];
+    [ns addObserver:self selector:@selector(doneParsing:) name:@"parsed" object:nil];
+}
+
+
+- (void)viewDidUnload
+{
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-    
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }*/
-
+}
 @end
